@@ -3,18 +3,18 @@ project(ua-parser-lib-builder LANGUAGES CXX)
 
 add_subdirectory(contrib/re2)
 
-set(RE2_HEADERS
-    contrib/re2/re2/filtered_re2.h
-    contrib/re2/re2/re2.h
-    contrib/re2/re2/set.h
-    contrib/re2/re2/stringpiece.h
-    )
-
+set(RE2_HEADERS contrib/re2)
 
 set(BUILD_SHARED_LIBS OFF)
 add_subdirectory(contrib/yaml-cpp)
 
 set(YAML-CPP_HEADERS contrib/yaml-cpp/include)
+
+include_directories(BEFORE ${RE2_HEADERS})
+include_directories(BEFORE ${YAML-CPP_HEADERS})
+
+SET(EXT_CXX_FLAGS " -std=c++0x -Wall -Werror -g -fPIC -O3")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXT_CXX_FLAGS}")
 
 add_library(uaparser_cpp STATIC
     contrib/uap-cpp/UaParser.cpp
@@ -24,14 +24,13 @@ add_library(uaparser_cpp STATIC
     contrib/uap-cpp/internal/ReplaceTemplate.cpp
 )
 
-target_link_libraries(category_classifier_static PRIVATE
-    masks_matcher_static
+target_link_libraries(uaparser_cpp PRIVATE
+    re2 yaml-cpp 
 )
 
-#get_directory_property(hasParent PARENT_DIRECTORY)
-#if(hasParent)
-#    set(MASK_MATCHER_INCLUDE_DIR ${MASK_MATCHER_INCLUDE_DIR} PARENT_SCOPE)
-#    set(CATEGORY_CLASSIFIER_INCLUDE_DIR ${CATEGORY_CLASSIFIER_INCLUDE_DIR} PARENT_SCOPE)
-#    set(RapidJSON_INCLUDE_DIR ${RapidJSON_INCLUDE_DIR} PARENT_SCOPE)
-#endif()
+get_directory_property(hasParent PARENT_DIRECTORY)
+set(uaparser_cpp_INCLUDE_DIR contrib/uap-cpp)
+if(hasParent)
+    set(uaparser_cpp_INCLUDE_DIR ${uaparser_cpp_INCLUDE_DIR} PARENT_SCOPE)
+endif()
 
