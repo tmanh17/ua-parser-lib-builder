@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.5.1)
 project(ua-parser-lib-builder LANGUAGES CXX)
 
-add_subdirectory(contrib/re2)
+if (TARGET re2)
+else()
+    add_subdirectory(contrib/re2)
+    set(RE2_HEADERS contrib/re2)
+endif()
 
-set(RE2_HEADERS contrib/re2)
 
 set(BUILD_SHARED_LIBS OFF)
 add_subdirectory(contrib/yaml-cpp)
