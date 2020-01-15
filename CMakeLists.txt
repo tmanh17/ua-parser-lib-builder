@@ -32,7 +32,7 @@ target_link_libraries(uaparser_cpp PRIVATE
 )
 
 get_directory_property(hasParent PARENT_DIRECTORY)
-set(uaparser_cpp_INCLUDE_DIR contrib/uap-cpp)
+set(uaparser_cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/uap-cpp)
 if(hasParent)
     set(uaparser_cpp_INCLUDE_DIR ${uaparser_cpp_INCLUDE_DIR} PARENT_SCOPE)
 endif()
