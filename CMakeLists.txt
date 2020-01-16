@@ -2,9 +2,11 @@ cmake_minimum_required(VERSION 3.5.1)
 project(ua-parser-lib-builder LANGUAGES CXX)
 
 if (TARGET re2)
+    include_directories(BEFORE ${RE2_INCLUDE_DIR})
 else()
     add_subdirectory(contrib/re2)
-    set(RE2_HEADERS contrib/re2)
+    set(RE2_INCLUDE_DIR contrib/re2)
+    include_directories(BEFORE ${RE2_INCLUDE_DIR})
 endif()
 
 
@@ -13,7 +15,6 @@ add_subdirectory(contrib/yaml-cpp)
 
 set(YAML-CPP_HEADERS contrib/yaml-cpp/include)
 
-include_directories(BEFORE ${RE2_HEADERS})
 include_directories(BEFORE ${YAML-CPP_HEADERS})
 
 SET(EXT_CXX_FLAGS " -std=c++0x -Wall -Werror -g -fPIC -O3")
