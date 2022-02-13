@@ -10,12 +10,13 @@ else()
 endif()
 
 
-set(BUILD_SHARED_LIBS OFF)
-add_subdirectory(contrib/yaml-cpp)
-
-set(YAML-CPP_HEADERS contrib/yaml-cpp/include)
-
-include_directories(BEFORE ${YAML-CPP_HEADERS})
+if (TARGET yaml-cpp)
+    include_directories(BEFORE ${YAML-CPP_INCLUDE_DIR})
+else()
+    add_subdirectory(contrib/yaml-cpp)
+    set(YAML-CPP_INCLUDE_DIR contrib/yaml-cpp)
+    include_directories(BEFORE ${YAML-CPP_INCLUDE_DIR})
+endif()
 
 SET(EXT_CXX_FLAGS " -std=c++0x -Wall -Werror -g -fPIC -O3")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${EXT_CXX_FLAGS}")
@@ -37,4 +38,5 @@ set(uaparser_cpp_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/uap-cpp)
 if(hasParent)
     set(uaparser_cpp_INCLUDE_DIR ${uaparser_cpp_INCLUDE_DIR} PARENT_SCOPE)
 endif()
+
 
